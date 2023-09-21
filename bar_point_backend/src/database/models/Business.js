@@ -21,6 +21,7 @@ module.exports = (sequelize, dataTypes) => {
         }
     };
     let config = {
+        tableName: "business",
         timestamps: true,
         createdAt: 'create_time',
         updatedAt: false,
