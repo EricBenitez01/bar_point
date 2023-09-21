@@ -24,7 +24,7 @@ module.exports = (sequelize, dataTypes) => {
             allowNull: false
         },
         points_req: {
-            type: dataTypes.STRING(45),
+            type: dataTypes.INTEGER,
             allowNull: false
         }
     };
