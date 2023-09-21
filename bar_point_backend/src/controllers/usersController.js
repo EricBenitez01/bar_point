@@ -1,4 +1,6 @@
 const db = require('../database/models');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 module.exports = {
     list: async (req, res) => {
@@ -71,26 +73,49 @@ module.exports = {
     },
     create: async (req, res) => {
         
-        const {name, surname, email, password} = req.body;
+        const {name, surname, email, password} = req.body;        
 
         try {
+
+            // Se verifica si el user ya existe en la bd
+            const existingUser = await db.User.findOne({ where: { email: email } });
+
+            if (existingUser) {
+                return res.status(400).json({ 
+                    ok: false, 
+                    msg: 'The entered user already exists in the database' 
+                });
+            }
+
+            // Se genera el hash para el password
+            const hashedPassword = await bcrypt.hash(password, 10);
+
             let newUser = await db.User.create(
                 {
                     name: name && name.trim(),
                     surname: surname && surname.trim(),
                     email: email,
-                    password: password,
+                    password: hashedPassword,
                 }
             )
 
             if (newUser) {
+
+                // Se genera el token para el nuevo user
+                const token = jwt.sign({ userId: newUser.id }, process.env.SECRET_TOKEN);
+
+                // Se asigna el token generado al nuevo user
+                newUser.token = token;
+                await newUser.save();
+
                 return res.status(200).json({
                     ok: true,
                     meta: {
                         total: 1,
                         url: `${req.protocol}://${req.get('host')}/users/${newUser.id}`
                     },
-                    data: newUser
+                    data: newUser,
+                    token: token
                 })
             };
 
