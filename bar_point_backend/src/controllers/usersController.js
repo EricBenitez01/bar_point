@@ -167,8 +167,8 @@ module.exports = {
             const user = await db.User.findByPk(userId);
 
             await db.User.destroy({
-               where: { id: userId },
-               force: true // force: true is to ensure that the action is executed
+                where: { id: userId },
+                force: true // force: true is to ensure that the action is executed
             });
             
             if(user){
@@ -190,5 +190,5 @@ module.exports = {
                 msg : error.message ? error.message : "Contact the site administrator",
             });
         }
-      }
-}
+    }
+};
