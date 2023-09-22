@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {all, detail, store, update, destroy} = require('../controllers/benefitsController');
+const { all, detail, store, update, destroy } = require('../controllers/benefitsController');
 
 router
     .get('/benefits', all)

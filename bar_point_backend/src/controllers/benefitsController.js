@@ -154,7 +154,7 @@ module.exports = {
                 return res.status(200).json({
                     ok: true,
                     status: 200,
-                    msg:'Benefit removed'
+                    msg: 'Benefit removed'
                 })
             };
 
