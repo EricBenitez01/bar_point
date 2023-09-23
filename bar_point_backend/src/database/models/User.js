@@ -8,11 +8,7 @@ module.exports = (sequelize, dataTypes) => {
             allowNull : false,
             autoIncrement : true,
         },
-        name : {
-            type : dataTypes.STRING(500),
-            allowNull : false,
-        },
-        surname : {
+        username : {
             type : dataTypes.STRING(500),
             allowNull : false,
         },
@@ -24,14 +20,14 @@ module.exports = (sequelize, dataTypes) => {
             type : dataTypes.STRING(500),
             allowNull : false,
         },
-        token: {
-            type: dataTypes.STRING(500), 
-            allowNull: true, 
+        rolFK : {
+            type : dataTypes.INTEGER.UNSIGNED,
+            allowNull : false,
         },
     };
 
     const config = {
-        tableName : "users",
+        tableName : "user",
         timestamps : false
     }
 

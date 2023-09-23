@@ -73,7 +73,7 @@ module.exports = {
     },
     create: async (req, res) => {
         
-        const {name, surname, email, password} = req.body;        
+        const {username, email, password, rolFK} = req.body;        
 
         try {
 
@@ -92,21 +92,14 @@ module.exports = {
 
             let newUser = await db.User.create(
                 {
-                    name: name && name.trim(),
-                    surname: surname && surname.trim(),
+                    username: username && username.trim(),
                     email: email,
                     password: hashedPassword,
+                    rolFK: rolFK,
                 }
             )
 
             if (newUser) {
-
-                // Se genera el token para el nuevo user
-                const token = jwt.sign({ userId: newUser.id }, process.env.SECRET_TOKEN);
-
-                // Se asigna el token generado al nuevo user
-                newUser.token = token;
-                await newUser.save();
 
                 return res.status(200).json({
                     ok: true,
@@ -115,7 +108,6 @@ module.exports = {
                         url: `${req.protocol}://${req.get('host')}/users/${newUser.id}`
                     },
                     data: newUser,
-                    token: token
                 })
             };
 
@@ -159,8 +151,8 @@ module.exports = {
                 msg : error.message ? error.message : "Contact the site administrator",
             });
         }
-      },
-      destroy: async function (req, res) {
+    },
+    destroy: async function (req, res) {
 
         try {
             let userId = req.params.id;

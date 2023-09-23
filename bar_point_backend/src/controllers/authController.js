@@ -9,7 +9,7 @@ module.exports = {
         try {
 
             // Se verifica si el user existe en la bd
-            const user = await db.User.findOne({ where: { email } });
+            const user = await db.User.findOne({ where: { email: email } });
 
             if (!user) {
                 return res.status(401).json({ 
@@ -19,12 +19,12 @@ module.exports = {
             }
 
             // Se compara la contraseña ingresada con la contraseña persistida 
-            const passwordMatch = await bcrypt.compare(password, user.password);
+            const passwordMatch = await bcrypt.compare(password, user.dataValues.password);
 
             if (!passwordMatch) {
                 return res.status(401).json({ 
                     ok: false, 
-                    msg: 'Invalid credentials' 
+                    msg: 'Invalid credentials, wrong password' 
                 });
             }
 
