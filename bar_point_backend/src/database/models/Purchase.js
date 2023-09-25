@@ -1,5 +1,5 @@
 module.exports = (sequelize, dataTypes) => {
-    let alias = 'Benefit';
+    let alias = 'Purchase';
     let cols = {
         id: {
             type: dataTypes.INTEGER,
@@ -11,42 +11,34 @@ module.exports = (sequelize, dataTypes) => {
             type: dataTypes.INTEGER,
             allowNull: false
         },
-        benefitname: {
-            type: dataTypes.STRING(45),
-            defaultValue: null
-        },
-        img: {
-            type: dataTypes.STRING(45),
-            defaultValue: null
-        },
-        discount: {
+        purchase_value: {
             type: dataTypes.INTEGER,
             allowNull: false
         },
-        points_req: {
+        points: {
             type: dataTypes.INTEGER,
             allowNull: false
         }
     };
     let config = {
-        tableName: "benefit",
+        tableName: "purchase",
         timestamps: false
     }
-    const Benefit = sequelize.define(alias, cols, config);
+    const Purchase = sequelize.define(alias, cols, config);
 
-    Benefit.associate = function (models) {
-        Benefit.belongsTo(models.Business, {
+    Purchase.associate = function (models) {
+        Purchase.belongsTo(models.Business, {
             as: "business",
             foreignKey: "businessFK"
         })
     };
 
-    Benefit.associate = function (models) {
-        Benefit.hasMany(models.Transaction_type, {
+    Purchase.associate = function (models) {
+        Purchase.hasMany(models.Transaction_type, {
             as: "transaction_types",
-            foreignKey: "benefitFK"
+            foreignKey: "purchaseFK"
         })
     };
 
-    return Benefit
+    return Purchase
 };

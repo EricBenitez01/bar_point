@@ -16,7 +16,7 @@ module.exports = (sequelize, dataTypes) => {
             defaultValue: null
         },
         password: {
-            type: dataTypes.BIGINT(10).UNSIGNED,
+            type: dataTypes.STRING(32),
             allowNull: false
         }
     };
@@ -34,7 +34,29 @@ module.exports = (sequelize, dataTypes) => {
             as: "benefits",
             foreignKey: "businessFK"
         })
-    }
+    };
+
+    Business.associate = function (models) {
+        Business.hasMany(models.Purchase, {
+            as: "purchases",
+            foreignKey: "businessFK"
+        })
+    };
+
+    Business.associate = function (models) {
+        Business.hasMany(models.User_points, {
+            as: "user_points",
+            foreignKey: "businessFK"
+        })
+    };
+
+    Business.associate = function (models) {
+        Business.hasMany(models.Transaction, {
+            as: "transactions",
+            foreignKey: "businessFK"
+        })
+    };
+
 
     return Business
 };
