@@ -1,0 +1,19 @@
+{
+  "name": "bar-point",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EricBenitez01/bar_point.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EricBenitez01/bar_point/issues"
+  },
+  "homepage": "https://github.com/EricBenitez01/bar_point#readme"
+}

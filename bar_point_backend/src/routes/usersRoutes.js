@@ -1,6 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const {list, detail, create, update, destroy} = require('../controllers/usersController');
+const {
+    list,
+    detail,
+    create,
+    update,
+    destroy
+} = require('../controllers/usersController');
 
 router
     .get('/users', list)
