@@ -9,5 +9,4 @@ router
     .put('/users/:id', update)
     .delete('/users/:id', destroy)
 
-
 module.exports = router;
