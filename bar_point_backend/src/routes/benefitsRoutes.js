@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const { all, detail, store, update, destroy } = require('../controllers/benefitsController');
+const { list, detail, create, update, destroy } = require('../controllers/benefitsController');
 
 router
-    .get('/benefits', all)
+    .get('/benefits', list)
     .get('/benefits/:id', detail)
-    .post('/benefits', store)
+    .post('/benefits', create)
     .put('/benefits/:id', update)
     .delete('/benefits/:id', destroy)
 

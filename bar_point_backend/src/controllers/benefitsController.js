@@ -1,7 +1,7 @@
 const db = require('../database/models');
 
 module.exports = {
-    all: async (req, res) => {
+    list: async (req, res) => {
 
         try {
             let { order = "id" } = req.query;
@@ -76,7 +76,7 @@ module.exports = {
             });
         }
     },
-    store: async (req, res) => {
+    create: async (req, res) => {
 
         const { businessFK, benefitname,/*  img, */ discount, points_req } = req.body;
 
