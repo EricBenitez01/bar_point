@@ -22,9 +22,7 @@ USE `barpoint` ;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `barpoint`.`rol` (
   `id` INT NOT NULL,
-  `user_rol` INT NOT NULL,
-  `admin_rol` INT NOT NULL,
-  `business_rol` INT NOT NULL,
+  `rol` INT NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
