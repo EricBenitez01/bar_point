@@ -9,15 +9,15 @@ module.exports = (sequelize, dataTypes) => {
             autoIncrement: true
         },
         username: {
-            type: dataTypes.STRING(16),
+            type: dataTypes.STRING(500),
             allowNull: false
         },
         email: {
-            type: dataTypes.STRING(255),
+            type: dataTypes.STRING(500),
             allowNull: false
         },
         password: {
-            type: dataTypes.STRING(32),
+            type: dataTypes.STRING(500),
             allowNull: false
         },
         rolFK: {

@@ -18,6 +18,10 @@ module.exports = (sequelize, dataTypes) => {
         points: {
             type: dataTypes.INTEGER,
             allowNull: false
+        },
+        ticket_number: {
+            type: dataTypes.INTEGER,
+            defaultValue: null
         }
     };
     let config = {
