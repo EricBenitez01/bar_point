@@ -5,6 +5,9 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+-- -----------------------------------------------------
 -- Schema barpoint
 -- -----------------------------------------------------
 
@@ -20,39 +23,52 @@ USE `barpoint` ;
 CREATE TABLE IF NOT EXISTS `barpoint`.`rol` (
   `id` INT NOT NULL,
   `rol` INT NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE = InnoDB;
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
--- -----------------------------------------------------
--- Table `barpoint`.`user`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `barpoint`.`user` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `username` VARCHAR(16) NOT NULL,
-  `email` VARCHAR(255) NOT NULL,
-  `password` VARCHAR(32) NOT NULL,
-  `create_time` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-  `rolFK` INT NOT NULL,
-  PRIMARY KEY (`id`),
-  INDEX `rolFK_idx` (`rolFK` ASC),
-  CONSTRAINT `rolFK`
-    FOREIGN KEY (`rolFK`)
-    REFERENCES `barpoint`.`rol` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION
-) ENGINE = InnoDB;
 
 -- -----------------------------------------------------
 -- Table `barpoint`.`business`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `barpoint`.`business` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `username` VARCHAR(16) NOT NULL,
-  `email` VARCHAR(255) NULL,
-  `password` VARCHAR(32) NOT NULL,
-  `create_time` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE = InnoDB;
+  `username` VARCHAR(500) NOT NULL,
+  `email` VARCHAR(500) NULL DEFAULT NULL,
+  `password` VARCHAR(500) NOT NULL,
+  `create_time` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP(),
+  `rolFK` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `rolFK_idx` (`rolFK` ASC),
+  CONSTRAINT `business_rolFK`
+    FOREIGN KEY (`rolFK`) -- Cambia `business_rolFK` a `rolFK` aquí
+    REFERENCES `barpoint`.`rol` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `barpoint`.`benefit`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `barpoint`.`benefit` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `businessFK` INT NOT NULL,
+  `benefitname` VARCHAR(500) NULL DEFAULT NULL,
+  `img` VARCHAR(500) NULL DEFAULT NULL,
+  `discount` INT NOT NULL,
+  `points_req` VARCHAR(500) NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `businessFK_idx` (`businessFK` ASC),
+  CONSTRAINT `businessFK_benefit`
+    FOREIGN KEY (`businessFK`)
+    REFERENCES `barpoint`.`business` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
 
 -- -----------------------------------------------------
 -- Table `barpoint`.`purchase`
@@ -62,33 +78,17 @@ CREATE TABLE IF NOT EXISTS `barpoint`.`purchase` (
   `businessFK` INT NOT NULL,
   `purchase_value` INT NOT NULL,
   `points` INT NOT NULL,
+  `ticket_number` INT NULL,
   PRIMARY KEY (`id`),
   INDEX `businessFK_idx` (`businessFK` ASC),
   CONSTRAINT `businessFK`
     FOREIGN KEY (`businessFK`)
     REFERENCES `barpoint`.`business` (`id`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION
-) ENGINE = InnoDB;
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
--- -----------------------------------------------------
--- Table `barpoint`.`benefit`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `barpoint`.`benefit` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `businessFK` INT NOT NULL,
-  `benefitname` VARCHAR(45) NULL,
-  `img` VARCHAR(45) NULL,
-  `discount` INT NOT NULL,
-  `points_req` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`id`),
-  INDEX `businessFK_idx` (`businessFK` ASC),
-  CONSTRAINT `businessFK_benefit`
-    FOREIGN KEY (`businessFK`)
-    REFERENCES `barpoint`.`business` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION
-) ENGINE = InnoDB;
 
 -- -----------------------------------------------------
 -- Table `barpoint`.`transaction_type`
@@ -100,17 +100,40 @@ CREATE TABLE IF NOT EXISTS `barpoint`.`transaction_type` (
   PRIMARY KEY (`id`),
   INDEX `purchaseFK_idx` (`purchaseFK` ASC),
   INDEX `benefit_idx` (`benefitFK` ASC),
-  CONSTRAINT `purchaseFK_transaction`
-    FOREIGN KEY (`purchaseFK`)
-    REFERENCES `barpoint`.`purchase` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
   CONSTRAINT `benefit_transaction`
     FOREIGN KEY (`benefitFK`)
     REFERENCES `barpoint`.`benefit` (`id`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION
-) ENGINE = InnoDB;
+    ON UPDATE NO ACTION,
+  CONSTRAINT `purchaseFK_transaction`
+    FOREIGN KEY (`purchaseFK`)
+    REFERENCES `barpoint`.`purchase` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `barpoint`.`user`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `barpoint`.`user` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `username` VARCHAR(500) NOT NULL,
+  `email` VARCHAR(500) NOT NULL,
+  `password` VARCHAR(500) NOT NULL,
+  `create_time` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP(),
+  `rolFK` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `rolFK_idx` (`rolFK` ASC),
+  CONSTRAINT `rolFK`
+    FOREIGN KEY (`rolFK`)
+    REFERENCES `barpoint`.`rol` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
 
 -- -----------------------------------------------------
 -- Table `barpoint`.`transaction`
@@ -124,25 +147,24 @@ CREATE TABLE IF NOT EXISTS `barpoint`.`transaction` (
   INDEX `userFK_idx` (`userFK` ASC),
   INDEX `businessFK_idx` (`businessFK` ASC),
   INDEX `transaction_typeFK_idx` (`transaction_typeFK` ASC),
-  -- Restricción de clave externa para userFK
-CONSTRAINT `userFK_transaction`
-    FOREIGN KEY (`userFK`)
-    REFERENCES `barpoint`.`user` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
--- Restricción de clave externa para businessFK
-CONSTRAINT `businessFK_transaction`
+  CONSTRAINT `businessFK_transaction`
     FOREIGN KEY (`businessFK`)
     REFERENCES `barpoint`.`business` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
--- Restricción de clave externa para transaction_typeFK
-CONSTRAINT `transaction_typeFK_transaction`
+  CONSTRAINT `transaction_typeFK_transaction`
     FOREIGN KEY (`transaction_typeFK`)
     REFERENCES `barpoint`.`transaction_type` (`id`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION
-) ENGINE = InnoDB;
+    ON UPDATE NO ACTION,
+  CONSTRAINT `userFK_transaction`
+    FOREIGN KEY (`userFK`)
+    REFERENCES `barpoint`.`user` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
 
 -- -----------------------------------------------------
 -- Table `barpoint`.`user_points`
@@ -155,19 +177,19 @@ CREATE TABLE IF NOT EXISTS `barpoint`.`user_points` (
   PRIMARY KEY (`id`),
   INDEX `userFK_idx` (`userFK` ASC),
   INDEX `businessFK_idx` (`businessFK` ASC),
-  -- Restricción de clave externa para userFK en user_points
-CONSTRAINT `userFK_user_points`
-    FOREIGN KEY (`userFK`)
-    REFERENCES `barpoint`.`user` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
--- Restricción de clave externa para businessFK en user_points
-CONSTRAINT `businessFK_user_points`
+  CONSTRAINT `businessFK_user_points`
     FOREIGN KEY (`businessFK`)
     REFERENCES `barpoint`.`business` (`id`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION
-) ENGINE = InnoDB;
+    ON UPDATE NO ACTION,
+  CONSTRAINT `userFK_user_points`
+    FOREIGN KEY (`userFK`)
+    REFERENCES `barpoint`.`user` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
