@@ -3,11 +3,11 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 module.exports = {
-    userLogin: async (req, res) => {
+    userLogin: async (req, res) => { debugger;
         const { email, password } = req.body;
-
+        debugger;
         try {
-
+            debugger;
             // Se verifica si el user existe en la bd
             const user = await db.User.findOne({ where: { email: email } });
 
@@ -37,11 +37,11 @@ module.exports = {
                 token,
             });
 
-        } catch (error) {
+        } catch (error) {debugger;
 
             return res.status(500).json({
                 ok: false,
-                msg: 'Server error',
+                msg: error.message ? error.message : 'Server error',
             });
 
         }

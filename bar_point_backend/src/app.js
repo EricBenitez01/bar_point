@@ -11,22 +11,25 @@ const cors = require('cors');
 
 const app = express();
 
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
-
-// Configurar opciones de CORS
 const corsOptions = {
     origin: 'http://localhost:4200', // Dominio de tu aplicación Angular
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    optionsSuccessStatus: 200, // Algunas versiones de navegadores antiguos (IE11, por ejemplo) requieren esto
+    optionsSuccessStatus: 200,
 };
+
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+app.use(cors(corsOptions));
+
+// Configurar opciones de CORS
+
   
 // Aplicar CORS solo a la ruta /users
 app.use(authRoute, cors(corsOptions));
 app.use(usersRoutes, cors(corsOptions));
-app.use(benefitsRoutes);
-app.use(purchaseRoutes);
-app.use(transaction);
+app.use(benefitsRoutes, cors(corsOptions));
+app.use(purchaseRoutes, cors(corsOptions));
+app.use(transaction, cors(corsOptions));
 
 
 app.listen('3001', () => console.log('Server running in port 3001'));
