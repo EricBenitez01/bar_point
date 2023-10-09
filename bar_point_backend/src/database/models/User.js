@@ -16,6 +16,18 @@ module.exports = (sequelize, dataTypes) => {
             type: dataTypes.STRING(500),
             allowNull: false
         },
+        address: {
+            type: dataTypes.STRING(255),
+            allowNull: false
+        },
+        gender: {
+            type: dataTypes.STRING(16),
+            allowNull: false
+        },
+        birthday: {
+            type: dataTypes.DATE,
+            allowNull: false
+        },
         password: {
             type: dataTypes.STRING(500),
             allowNull: false
@@ -40,21 +52,17 @@ module.exports = (sequelize, dataTypes) => {
         User.belongsTo(models.Rol, {
             as: "rol",
             foreignKey: "rolFK"
-        })
-    };
-
-    User.associate = function (models) {
+        });
+    
         User.hasMany(models.User_points, {
             as: "user_points",
             foreignKey: "userFK"
-        })
-    };
-
-    User.associate = function (models) {
+        });
+    
         User.hasMany(models.Transaction, {
             as: "transactions",
             foreignKey: "userFK"
-        })
+        });
     };
 
     return User;

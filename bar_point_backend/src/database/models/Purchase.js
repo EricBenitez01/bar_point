@@ -21,7 +21,7 @@ module.exports = (sequelize, dataTypes) => {
         },
         ticket_number: {
             type: dataTypes.INTEGER,
-            defaultValue: null
+            allowNull: true
         }
     };
     let config = {
