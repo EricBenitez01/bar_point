@@ -70,7 +70,7 @@ module.exports = {
     },
     create: async (req, res) => {
 
-        const { username, email, password } = req.body;
+        const { username, email, password, menu } = req.body;
 
         try {
 
@@ -93,6 +93,7 @@ module.exports = {
                     email: email,
                     password: hashedPassword,
                     rolFK: 2,
+                    menu: req.file?.filename,
                 }
             )
 
@@ -118,7 +119,7 @@ module.exports = {
     },
     update: async (req, res) => {
 
-        const { username, email, password } = req.body;
+        const { username, email, password, menu } = req.body;
 
         // Se genera el hash para el password
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -129,6 +130,7 @@ module.exports = {
             updateBusiness.username = username?.trim();
             updateBusiness.email = email?.trim();
             updateBusiness.password = hashedPassword;
+            updateBenefit.menu = req.file?.menu || updateBenefit.menu;
 
             await updateBusiness.save();
 

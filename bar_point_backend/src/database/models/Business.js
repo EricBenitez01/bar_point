@@ -22,6 +22,10 @@ module.exports = (sequelize, dataTypes) => {
         rolFK: {
             type: dataTypes.INTEGER,
             allowNull: false
+        },
+        menu: {
+            type: dataTypes.STRING(500),
+            defaultValue: null
         }
     };
     let config = {
