@@ -39,8 +39,9 @@ module.exports = {
     },
     detail: async (req, res) => {
         try {
-
-            const { id } = req.params
+            
+            const { id } = req.params;
+            const { businessId } = req.body;
 
             if (isNaN(id)) {
                 throw new Error('the ID must be a number')
@@ -51,6 +52,25 @@ module.exports = {
                     exclude: ['password'],
                 }
             });
+
+            if (!businessId || isNaN(businessId)) {
+                throw new Error('businessId no es válido');
+            }
+
+            const userPoints = await db.User_points.findOne({
+                where: {
+                    userFK: id,
+                    businessFK: businessId,
+                },
+                attributes: ['quantity'], // Supongo que la columna de puntos se llama 'quantity'
+            });
+
+            // Agregar los puntos a los datos del usuario en la respuesta JSON
+            if (userPoints) {
+                user.dataValues.userPoints = userPoints.quantity;
+            } else {
+                user.dataValues.userPoints = 0; // Si no se encuentran puntos, se establece en 0
+            }
 
             if (user) {
                 return res.status(200).json({
@@ -72,8 +92,8 @@ module.exports = {
         }
     },
     create: async (req, res) => {
-        
-        const {username, email, password, rolFK} = req.body;        
+
+        const { username, email, address, gender, birthday, password, rolFK } = req.body;
 
         try {
 
@@ -81,9 +101,9 @@ module.exports = {
             const existingUser = await db.User.findOne({ where: { email: email } });
 
             if (existingUser) {
-                return res.status(400).json({ 
-                    ok: false, 
-                    msg: 'The entered user already exists in the database' 
+                return res.status(400).json({
+                    ok: false,
+                    msg: 'The entered user already exists in the database'
                 });
             }
 
@@ -94,6 +114,9 @@ module.exports = {
                 {
                     username: username && username.trim(),
                     email: email,
+                    address: address,
+                    gender: gender,
+                    birthday: birthday,
                     password: hashedPassword,
                     rolFK: rolFK,
                 }
@@ -121,7 +144,7 @@ module.exports = {
     },
     update: async function (req, res) {
 
-        const {name, surname, email, password} = req.body;
+        const { name, surname, email, password } = req.body;
 
         try {
             let updateUser = await db.User.findByPk(req.params.id);
@@ -133,14 +156,14 @@ module.exports = {
 
             await updateUser.save();
 
-            if(updateUser){
+            if (updateUser) {
                 return res.status(200).json({
                     ok: true,
-                    meta : {
-                        total : 1,
-                        url : `${req.protocol}://${req.get('host')}/users/${updateUser.id}`
+                    meta: {
+                        total: 1,
+                        url: `${req.protocol}://${req.get('host')}/users/${updateUser.id}`
                     },
-                    data : updateUser
+                    data: updateUser
                 })
             };
 
@@ -148,7 +171,7 @@ module.exports = {
             console.log(error);
             return res.status(error.status || 500).json({
                 ok: false,
-                msg : error.message ? error.message : "Contact the site administrator",
+                msg: error.message ? error.message : "Contact the site administrator",
             });
         }
     },
@@ -162,16 +185,16 @@ module.exports = {
                 where: { id: userId },
                 force: true // force: true is to ensure that the action is executed
             });
-            
-            if(user){
+
+            if (user) {
                 return res.status(200).json({
                     ok: true,
-                    meta : {
+                    meta: {
                         status: 200,
-                        total : 1,
-                        url : `${req.protocol}://${req.get('host')}/users`
+                        total: 1,
+                        url: `${req.protocol}://${req.get('host')}/users`
                     },
-                    data : user
+                    data: user
                 })
             };
 
@@ -179,7 +202,7 @@ module.exports = {
             console.log(error);
             return res.status(error.status || 500).json({
                 ok: false,
-                msg : error.message ? error.message : "Contact the site administrator",
+                msg: error.message ? error.message : "Contact the site administrator",
             });
         }
     }

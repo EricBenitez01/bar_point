@@ -20,14 +20,18 @@ USE `barpoint` ;
 -- -----------------------------------------------------
 -- Table `barpoint`.`rol`
 -- -----------------------------------------------------
+-- Crear la tabla rol
 CREATE TABLE IF NOT EXISTS `barpoint`.`rol` (
   `id` INT NOT NULL,
-  `user_rol` INT NOT NULL,
-  `admin_rol` INT NOT NULL,
-  `business_rol` INT NOT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+  `rol` VARCHAR(500) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;
+
+-- Insertar los campos
+INSERT INTO `barpoint`.`rol` (`id`, `rol`) VALUES
+(1, 'user'),
+(2, 'superUser'),
+(3, 'business');
 
 
 -- -----------------------------------------------------
@@ -49,6 +53,13 @@ CREATE TABLE IF NOT EXISTS `barpoint`.`business` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
+
+-- Insertar dos negocios mockeados en la tabla business
+INSERT INTO `barpoint`.`business` (`username`, `email`, `password`, `rolFK`)
+VALUES
+('Negocio1', 'negocio1@example.com', 'contraseña1', 3), -- ID 3 corresponde al rol 'business'
+('Negocio2', 'negocio2@example.com', 'contraseña2', 3); -- ID 3 corresponde al rol 'business'
+
 
 
 -- -----------------------------------------------------
@@ -80,7 +91,7 @@ CREATE TABLE IF NOT EXISTS `barpoint`.`purchase` (
   `businessFK` INT NOT NULL,
   `purchase_value` INT NOT NULL,
   `points` INT NOT NULL,
-  `ticket_number` INT NULL,
+  `ticket_number` DOUBLE NULL,
   PRIMARY KEY (`id`),
   INDEX `businessFK_idx` (`businessFK` ASC),
   CONSTRAINT `businessFK`
@@ -91,30 +102,23 @@ CREATE TABLE IF NOT EXISTS `barpoint`.`purchase` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
+INSERT INTO `barpoint`.`benefit` (`id`, `businessFK`, `benefitname`, `discount`, `points_req`) VALUES ('1', '1', 'promo', '1', '1000');
+INSERT INTO `barpoint`.`benefit` (`id`, `businessFK`, `benefitname`, `discount`, `points_req`) VALUES ('2', '1', 'promo1', '1', '50');
 
 -- -----------------------------------------------------
 -- Table `barpoint`.`transaction_type`
 -- -----------------------------------------------------
+-- Crear la tabla transaction_type
 CREATE TABLE IF NOT EXISTS `barpoint`.`transaction_type` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `purchaseFK` INT NOT NULL,
-  `benefitFK` INT NOT NULL,
-  PRIMARY KEY (`id`),
-  INDEX `purchaseFK_idx` (`purchaseFK` ASC),
-  INDEX `benefit_idx` (`benefitFK` ASC),
-  CONSTRAINT `benefit_transaction`
-    FOREIGN KEY (`benefitFK`)
-    REFERENCES `barpoint`.`benefit` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `purchaseFK_transaction`
-    FOREIGN KEY (`purchaseFK`)
-    REFERENCES `barpoint`.`purchase` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+  `type` VARCHAR(500) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;
 
+
+INSERT INTO `barpoint`.`transaction_type` (`id`, `type`) VALUES
+(1, 'purchase'),
+(2, 'benefit');
 
 -- -----------------------------------------------------
 -- Table `barpoint`.`user`
@@ -124,6 +128,9 @@ CREATE TABLE IF NOT EXISTS `barpoint`.`user` (
   `username` VARCHAR(500) NOT NULL,
   `email` VARCHAR(500) NOT NULL,
   `password` VARCHAR(500) NOT NULL,
+  `birthday` TIMESTAMP NULL DEFAULT NULL,
+  `address` VARCHAR(255) NOT NULL,
+  `gender` VARCHAR(16) NOT NULL,
   `create_time` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP(),
   `rolFK` INT NOT NULL,
   PRIMARY KEY (`id`),

@@ -34,17 +34,11 @@ module.exports = (sequelize, dataTypes) => {
         Transaction.belongsTo(models.User, {
             as: "user",
             foreignKey: "userFK"
-        })
-    };
-
-    Transaction.associate = function (models) {
+        }),
         Transaction.belongsTo(models.Business, {
             as: "business",
             foreignKey: "businessFK"
-        })
-    };
-
-    Transaction.associate = function (models) {
+        }),
         Transaction.belongsTo(models.Transaction_type, {
             as: "transaction_type",
             foreignKey: "transaction_typeFK"
