@@ -1,12 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const { all, detail, store, update, destroy } = require('../controllers/benefitsController');
+const { list, detail, create, update, destroy } = require('../controllers/benefitsController');
+
+const { uploadImageBenefit } = require('../middlewares/uploadFiles');
 
 router
-    .get('/benefits', all)
+    .get('/benefits', list)
     .get('/benefits/:id', detail)
-    .post('/benefits', store)
-    .put('/benefits/:id', update)
+    .post('/benefits', uploadImageBenefit.single('img'), create)
+    .put('/benefits/:id', uploadImageBenefit.single('img'), update)
     .delete('/benefits/:id', destroy)
 
 

@@ -26,7 +26,14 @@ module.exports = (sequelize, dataTypes) => {
             as: "users",
             foreignKey: "rolFK"
         })
-    }
+    };
+
+    Rol.associate = function (models) {
+        Rol.hasMany(models.Business, {
+            as: "businesses",
+            foreignKey: "rolFK"
+        })
+    };
 
     return Rol;
 }

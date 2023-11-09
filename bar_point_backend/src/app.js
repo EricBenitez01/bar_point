@@ -16,6 +16,7 @@ const usersRoutes = require('./routes/usersRoutes');
 const benefitsRoutes = require('./routes/benefitsRoutes');
 const purchaseRoutes = require('./routes/purchaseRoutes');
 const transaction = require('./routes/transactionRoute');
+const businessesRoutes = require('./routes/businessesRoutes');
 const cors = require('cors');
 
 app.use(express.urlencoded({ extended: false }));
@@ -26,6 +27,7 @@ app.use(usersRoutes, cors(corsOptions));
 app.use(benefitsRoutes, cors(corsOptions));
 app.use(purchaseRoutes, cors(corsOptions));
 app.use(transaction, cors(corsOptions));
+app.use(businessesRoutes, cors(corsOptions));
 
 
 

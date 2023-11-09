@@ -12,11 +12,11 @@ module.exports = (sequelize, dataTypes) => {
             allowNull: false
         },
         benefitname: {
-            type: dataTypes.STRING(45),
+            type: dataTypes.STRING(500),
             defaultValue: null
         },
         img: {
-            type: dataTypes.STRING(45),
+            type: dataTypes.STRING(500),
             defaultValue: null
         },
         discount: {
