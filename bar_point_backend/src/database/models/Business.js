@@ -8,16 +8,24 @@ module.exports = (sequelize, dataTypes) => {
             autoIncrement: true
         },
         username: {
-            type: dataTypes.STRING(16),
+            type: dataTypes.STRING(500),
             allowNull: false
         },
         email: {
-            type: dataTypes.STRING(255),
+            type: dataTypes.STRING(500),
             defaultValue: null
         },
         password: {
-            type: dataTypes.STRING(32),
+            type: dataTypes.STRING(500),
             allowNull: false
+        },
+        rolFK: {
+            type: dataTypes.INTEGER,
+            allowNull: false
+        },
+        menu: {
+            type: dataTypes.STRING(500),
+            defaultValue: null
         }
     };
     let config = {
@@ -54,6 +62,13 @@ module.exports = (sequelize, dataTypes) => {
         Business.hasMany(models.Transaction, {
             as: "transactions",
             foreignKey: "businessFK"
+        })
+    };
+
+    Business.associate = function (models) {
+        Business.belongsTo(models.Rol, {
+            as: "rol",
+            foreignKey: "rolFK"
         })
     };
 

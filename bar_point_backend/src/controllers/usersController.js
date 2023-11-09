@@ -40,8 +40,9 @@ module.exports = {
     },
     detail: async (req, res) => {
         try {
-
-            const { id } = req.params
+            
+            const { id } = req.params;
+            const { businessId } = req.body;
 
             if (isNaN(id)) {
                 throw new Error('the ID must be a number')
@@ -52,6 +53,25 @@ module.exports = {
                     exclude: ['password'],
                 }
             });
+
+            if (!businessId || isNaN(businessId)) {
+                throw new Error('businessId no es válido');
+            }
+
+            const userPoints = await db.User_points.findOne({
+                where: {
+                    userFK: id,
+                    businessFK: businessId,
+                },
+                attributes: ['quantity'], // Supongo que la columna de puntos se llama 'quantity'
+            });
+
+            // Agregar los puntos a los datos del usuario en la respuesta JSON
+            if (userPoints) {
+                user.dataValues.userPoints = userPoints.quantity;
+            } else {
+                user.dataValues.userPoints = 0; // Si no se encuentran puntos, se establece en 0
+            }
 
             if (user) {
                 return res.status(200).json({
