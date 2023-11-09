@@ -1,6 +1,7 @@
 const db = require('../database/models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { Op } = require('sequelize');
 
 module.exports = {
     list: async (req, res) => {
@@ -163,7 +164,7 @@ module.exports = {
 
             await db.User.destroy({
                 where: { id: userId },
-                force: true // force: true is to ensure that the action is executed
+                force: true
             });
 
             if (user) {
@@ -185,5 +186,43 @@ module.exports = {
                 msg: error.message ? error.message : "Contact the site administrator",
             });
         }
-    }
+    },
+    searchUser: async (req, res) => {
+        try {
+            const { username } = req.body;
+
+            if (!username) {
+                throw new Error('The username parameter is missing.');
+            }
+
+            const user = await db.User.findOne({
+                where: {
+                    username: {
+                        [Op.like]: `%${username}%`
+                    }
+                },
+                attributes: {
+                    exclude: ['password']
+                }
+            });
+
+            if (user) {
+                return res.status(200).json({
+                    ok: true,
+                    meta: {
+                        status: 200
+                    },
+                    data: user
+                });
+            }
+            throw new Error('User not found');
+            
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({
+                ok: false,
+                msg: error.message ? error.message : 'Contact the site administrator'
+            });
+        }
+    },
 };
