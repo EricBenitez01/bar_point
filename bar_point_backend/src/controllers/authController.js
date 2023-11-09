@@ -37,8 +37,7 @@ module.exports = {
                 token,
             });
 
-        } catch (error) {debugger;
-
+        } catch (error) {
             return res.status(500).json({
                 ok: false,
                 msg: error.message ? error.message : 'Server error',
