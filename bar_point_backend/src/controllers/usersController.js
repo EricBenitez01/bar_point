@@ -5,20 +5,27 @@ const { Op } = require('sequelize');
 
 module.exports = {
     list: async (req, res) => {
-
         try {
-            let { order = "id" } = req.query;
+            let { order = "id", businessId } = req.query;
             let orders = ["id", "name", "surname"];
-
+    
             if (!orders.includes(order)) {
-                throw new Error(`The ${order} field does not exist. Allowed fields : [name,surname]`);
+                throw new Error(`El campo ${order} no existe. Campos permitidos: [name, surname]`);
             }
+            let whereClause = {};
+            
+            if (businessId) {
+                whereClause.businessId = businessId;
+            }
+    
             let users = await db.User.findAll({
+                where: whereClause, // Aplica la cláusula WHERE
                 order: [order],
                 attributes: {
                     exclude: ['password']
                 }
-            })
+            });
+    
             if (users.length) {
                 return res.status(200).json({
                     ok: true,
@@ -26,16 +33,17 @@ module.exports = {
                         total: users.length
                     },
                     data: users
-                })
+                });
             }
-            throw new Error("There are no users");
-
+    
+            throw new Error("No hay usuarios");
+    
         } catch (error) {
             console.log(error);
             return res.status(500).json({
                 ok: false,
-                msg: error.message ? error.message : "Contact the site administrator"
-            })
+                msg: error.message ? error.message : "Contacte al administrador del sitio"
+            });
         }
     },
     detail: async (req, res) => {

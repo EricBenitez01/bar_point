@@ -2,23 +2,29 @@ const db = require('../database/models');
 
 module.exports = {
     list: async (req, res) => {
-
         try {
-            let { order = "id" } = req.query;
+            let { order = "id", businessId } = req.query;
             let orders = ["id", "benefitname", "point_req"];
-
+    
             if (!orders.includes(order)) {
-                throw new Error(`The ${order} field does not exist. Allowed fields : [benefitname,point_req]`);
+                throw new Error(`El campo ${order} no existe. Campos permitidos: [benefitname, point_req]`);
             }
+            let whereClause = {};
+
+            if (businessId) {
+                whereClause.businessId = businessId;
+            }
+    
             let benefits = await db.Benefit.findAll({
                 include: [
                     {
-                        association: 'business',
-                        attributes: ['username']
+                        association: 'business'
                     }
                 ],
+                where: whereClause,
                 order: [order],
-            })
+            });
+    
             if (benefits.length) {
                 return res.status(200).json({
                     ok: true,
@@ -26,16 +32,17 @@ module.exports = {
                         total: benefits.length
                     },
                     data: benefits
-                })
+                });
             }
-            throw new Error("There are no benefits");
-
+    
+            throw new Error("No hay beneficios");
+    
         } catch (error) {
             console.log(error);
             return res.status(500).json({
                 ok: false,
-                msg: error.message ? error.message : "Contact the site administrator"
-            })
+                msg: error.message ? error.message : "Contacte al administrador del sitio"
+            });
         }
     },
     detail: async (req, res) => {
