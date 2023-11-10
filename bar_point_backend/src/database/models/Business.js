@@ -7,7 +7,27 @@ module.exports = (sequelize, dataTypes) => {
             allowNull: false,
             autoIncrement: true
         },
-        username: {
+        name: {  // Cambiando el nombre de la columna
+            type: dataTypes.STRING(500),
+            allowNull: false
+        },
+        lastname: {
+            type: dataTypes.STRING(500),
+            allowNull: false
+        },
+        cuit: {
+            type: dataTypes.STRING(500),
+            allowNull: false
+        },
+        adress: {
+            type: dataTypes.STRING(500),
+            allowNull: false
+        },
+        phone: {
+            type: dataTypes.STRING(500),
+            allowNull: false
+        },
+        businessName: {
             type: dataTypes.STRING(500),
             allowNull: false
         },
