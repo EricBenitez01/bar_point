@@ -70,7 +70,7 @@ module.exports = {
     },
     create: async (req, res) => {
 
-        const { email, password, rolFK, name, lastname, cuit, adress, phone, businessName } = req.body;
+        const { name, email, password, lastname, cuit, adress, phone, businessName, rolFK, menu } = req.body
 
         try {
 
@@ -89,16 +89,16 @@ module.exports = {
 
             let newBusiness = await db.Business.create(
                 {
-                    email: email,
-                    password: hashedPassword,
                     name: name && name.trim(),
-                    lastname: lastname,
+                    lastname: lastname && lastname.trim(),
                     cuit: cuit,
                     adress: adress,
                     phone: phone,
                     businessName: businessName,
-                    rolFK: rolFK,
-                    menu: req.file?.filename,
+                    email: email,
+                    password: hashedPassword,
+                    rolFK: 2,
+                    menu: menu,
                 }
             )
 
