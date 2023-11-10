@@ -6,7 +6,7 @@ const { Op } = require('sequelize');
 module.exports = {
     list: async (req, res) => {
         try {
-            let { order = "id", businessId } = req.query;
+            let { order = "id", businessId } = req.params;
             let orders = ["id", "name", "surname"];
     
             if (!orders.includes(order)) {
@@ -19,7 +19,7 @@ module.exports = {
             }
     
             let users = await db.User.findAll({
-                where: whereClause, // Aplica la cláusula WHERE
+                where: whereClause,
                 order: [order],
                 attributes: {
                     exclude: ['password']
