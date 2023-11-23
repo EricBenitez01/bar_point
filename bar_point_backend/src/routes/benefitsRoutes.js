@@ -5,8 +5,8 @@ const { list, detail, create, update, destroy } = require('../controllers/benefi
 const { uploadImageBenefit } = require('../middlewares/uploadFiles');
 
 router
-    .get('/benefits', list)
-    .get('/benefits/:id', detail)
+    .get('/benefits/:id', list)
+    .get('/benefits/detail/:id', detail)
     .post('/benefits', uploadImageBenefit.single('img'), create)
     .put('/benefits/:id', uploadImageBenefit.single('img'), update)
     .delete('/benefits/:id', destroy)

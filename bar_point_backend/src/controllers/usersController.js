@@ -6,27 +6,43 @@ const { Op } = require('sequelize');
 module.exports = {
     list: async (req, res) => {
         try {
-            let { order = "id", businessId } = req.query;
+
+            let businessId = req.params.id;
+            let order = "id"
             let orders = ["id", "name", "surname"];
-    
+
             if (!orders.includes(order)) {
                 throw new Error(`El campo ${order} no existe. Campos permitidos: [name, surname]`);
             }
-            let whereClause = {};
             
-            if (businessId) {
-                whereClause.businessId = businessId;
-            }
-    
-            let users = await db.User.findAll({
-                where: whereClause, // Aplica la cláusula WHERE
+            const businessUsers = await db.User_points.findAll({
+                where: {
+                    businessFK: businessId,
+                },
                 order: [order],
                 attributes: {
                     exclude: ['password']
                 }
             });
-    
-            if (users.length) {
+
+            const userIds = businessUsers.map(user => user.userFK);
+            
+            const users = await db.User.findAll({
+                where: {
+                    id: userIds
+                },
+                include: [{
+                    model: db.User_points,
+                    as: 'user_points', // Alias de la asociación
+                    attributes: ['quantity']
+                }],
+                order: [order],
+                attributes: {
+                    exclude: ['password']
+                }
+            });
+            console.log(users);
+            if (users.length > 0) {
                 return res.status(200).json({
                     ok: true,
                     meta: {
@@ -35,9 +51,8 @@ module.exports = {
                     data: users
                 });
             }
-    
             throw new Error("No hay usuarios");
-    
+
         } catch (error) {
             console.log(error);
             return res.status(500).json({
@@ -48,9 +63,8 @@ module.exports = {
     },
     detail: async (req, res) => {
         try {
-            
-            const { id } = req.params;
-            const { businessId } = req.body;
+
+            let id = req.params.id;
 
             if (isNaN(id)) {
                 throw new Error('the ID must be a number')
@@ -61,25 +75,6 @@ module.exports = {
                     exclude: ['password'],
                 }
             });
-
-            if (!businessId || isNaN(businessId)) {
-                throw new Error('businessId no es válido');
-            }
-
-            const userPoints = await db.User_points.findOne({
-                where: {
-                    userFK: id,
-                    businessFK: businessId,
-                },
-                attributes: ['quantity'], // Supongo que la columna de puntos se llama 'quantity'
-            });
-
-            // Agregar los puntos a los datos del usuario en la respuesta JSON
-            if (userPoints) {
-                user.dataValues.userPoints = userPoints.quantity;
-            } else {
-                user.dataValues.userPoints = 0; // Si no se encuentran puntos, se establece en 0
-            }
 
             if (user) {
                 return res.status(200).json({
@@ -217,13 +212,12 @@ module.exports = {
     },
     searchUser: async (req, res) => {
         try {
-            const { username } = req.body;
-
+            let username = req.params.data;
             if (!username) {
                 throw new Error('The username parameter is missing.');
             }
 
-            const user = await db.User.findOne({
+            const user = await db.User.findAll({
                 where: {
                     username: {
                         [Op.like]: `%${username}%`
@@ -244,7 +238,7 @@ module.exports = {
                 });
             }
             throw new Error('User not found');
-            
+
         } catch (error) {
             console.error(error);
             return res.status(500).json({

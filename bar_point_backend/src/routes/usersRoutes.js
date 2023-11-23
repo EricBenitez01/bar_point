@@ -4,9 +4,9 @@ const {list, detail, create, update, destroy, searchUser} = require('../controll
 const verifyToken = require('../controllers/tokenVerification');
 
 router
-    .get('/users',  list)
-    .get('/users/searchUser', searchUser)
-    .get('/users/:id', detail)
+    .get('/users/:id',  list)
+    .get('/users/searchUser/:data', searchUser)
+    .get('/users/detail/:id', detail)
     .post('/users', create)
     .put('/users/:id', update)
     .delete('/users/:id', destroy)
