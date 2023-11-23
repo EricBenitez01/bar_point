@@ -3,7 +3,8 @@ const db = require('../database/models');
 module.exports = {
     list: async (req, res) => {
         try {
-            let { order = "id", businessId } = req.query;
+            let businessId  = req.params.id;
+            let order = "id";
             let orders = ["id", "benefitname", "point_req"];
     
             if (!orders.includes(order)) {
@@ -12,15 +13,17 @@ module.exports = {
             let whereClause = {};
 
             if (businessId) {
-                whereClause.businessId = businessId;
+                whereClause.businessFK = businessId;
             }
     
             let benefits = await db.Benefit.findAll({
+                /*
+                Se utiliza para traer datos del negocio  
                 include: [
                     {
                         association: 'business'
                     }
-                ],
+                ], */
                 where: whereClause,
                 order: [order],
             });

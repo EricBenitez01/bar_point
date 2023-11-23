@@ -38,15 +38,13 @@ module.exports = (sequelize, dataTypes) => {
         Benefit.belongsTo(models.Business, {
             as: "business",
             foreignKey: "businessFK"
-        })
-    };
-
-    Benefit.associate = function (models) {
+        });
+    
         Benefit.hasMany(models.Transaction_type, {
             as: "transaction_types",
             foreignKey: "benefitFK"
-        })
-    };
+        });
+    };    
 
     return Benefit
 };

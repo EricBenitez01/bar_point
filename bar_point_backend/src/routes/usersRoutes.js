@@ -5,7 +5,7 @@ const verifyToken = require('../controllers/tokenVerification');
 
 router
     .get('/users/:id',  list)
-    .get('/users/searchUser', searchUser)
+    .get('/users/searchUser/:data', searchUser)
     .get('/users/detail/:id', detail)
     .post('/users', create)
     .put('/users/:id', update)
