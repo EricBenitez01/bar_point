@@ -11,5 +11,4 @@ router
     .put('/businesses/:id', uploadPdfBusiness.single('menu'), update)
     .delete('/businesses/:id', destroy)
 
-
 module.exports = router;

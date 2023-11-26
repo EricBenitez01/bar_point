@@ -26,6 +26,10 @@ module.exports = (sequelize, dataTypes) => {
         points_req: {
             type: dataTypes.INTEGER,
             allowNull: false
+        },
+        description: {
+            type: dataTypes.STRING(500),
+            allowNull: false
         }
     };
     let config = {
