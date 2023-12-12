@@ -1,5 +1,6 @@
 const db = require('../database/models');
 const bcrypt = require('bcrypt');
+const path = require("path");
 
 module.exports = {
     list: async (req, res) => {
@@ -98,7 +99,7 @@ module.exports = {
                     email: email,
                     password: hashedPassword,
                     rolFK: 2,
-                    menu: menu,
+                    menu: req.file?.filename,
                 }
             )
 
@@ -135,7 +136,7 @@ module.exports = {
             updateBusiness.username = username?.trim();
             updateBusiness.email = email?.trim();
             updateBusiness.password = hashedPassword;
-            updateBenefit.menu = req.file?.menu || updateBenefit.menu;
+            updateBusiness.menu = req.file?.filename || updateBusiness.menu;
 
             await updateBusiness.save();
 
@@ -182,5 +183,10 @@ module.exports = {
                 msg: error.message ? error.message : "Contact the site administrator",
             });
         }
+    },
+    menu: (req, res) => {
+        res.sendFile(
+            path.join(__dirname, `../../public/pdfs/BusinessesPdf/${req.params.pdf}.pdf`)
+        )
     }
 }
