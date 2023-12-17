@@ -12,7 +12,7 @@ module.exports = (sequelize, dataTypes) => {
             type: dataTypes.INTEGER,
             allowNull: false
         },
-        businessFK: {
+        businessfk : {
             type: dataTypes.INTEGER,
             allowNull: false
         },
@@ -37,7 +37,7 @@ module.exports = (sequelize, dataTypes) => {
         }),
         Transaction.belongsTo(models.Business, {
             as: "business",
-            foreignKey: "businessFK"
+            foreignKey: "businessfk "
         }),
         Transaction.belongsTo(models.Transaction_type, {
             as: "transaction_type",

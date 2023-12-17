@@ -32,10 +32,10 @@ module.exports = (sequelize, dataTypes) => {
             type: dataTypes.STRING(500),
             allowNull: false
         },
-        rolFK: {
-            type: dataTypes.INTEGER,
-            allowNull: false
-        }
+        rolfk: {
+            type: dataTypes.INTEGER, // Adjust the data type accordingly
+            allowNull: false,
+        },
     };
 
     const config = {
@@ -51,7 +51,7 @@ module.exports = (sequelize, dataTypes) => {
     User.associate = function (models) {
         User.belongsTo(models.Rol, {
             as: "rol",
-            foreignKey: "rolFK"
+            foreignKey: "rolfk"
         });
     
         User.hasMany(models.User_points, {

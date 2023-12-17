@@ -17,7 +17,7 @@ module.exports = {
             
             const businessUsers = await db.User_points.findAll({
                 where: {
-                    businessFK: businessId,
+                    businessfk : businessId,
                 },
                 order: [order],
                 attributes: {
@@ -122,7 +122,7 @@ module.exports = {
                     gender: gender,
                     birthday: birthday,
                     password: hashedPassword,
-                    rolFK: rolFK,
+                    rolfk: rolFK,
                 }
             )
 

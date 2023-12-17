@@ -13,7 +13,7 @@ module.exports = {
             let whereClause = {};
 
             if (businessId) {
-                whereClause.businessFK = businessId;
+                whereClause.businessfk  = businessId;
             }
     
             let benefits = await db.Benefit.findAll({
@@ -88,12 +88,12 @@ module.exports = {
     },
     create: async (req, res) => {
 
-        const { businessFK, benefitname, img, discount, points_req, description } = req.body;
+        const { businessfk , benefitname, img, discount, points_req, description } = req.body;
 
         try {
             let newBenefit = await db.Benefit.create(
                 {
-                    businessFK: +businessFK,
+                    businessfk : +businessfk ,
                     benefitname: benefitname?.trim(),
                     discount: +discount,
                     points_req: +points_req,

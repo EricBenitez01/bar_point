@@ -1,6 +1,8 @@
 require('dotenv').config();
 const express = require('express');
 const path = require('path');
+const { Sequelize, DataTypes } = require("sequelize");
+const config = require('./database/config/config.js');
 
 const app = express();
 const corsOptions = {
@@ -8,8 +10,6 @@ const corsOptions = {
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     optionsSuccessStatus: 200,
 };
-
-
 
 const authRoute = require('./routes/authRoute');
 const usersRoutes = require('./routes/usersRoutes');

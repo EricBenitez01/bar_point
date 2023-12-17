@@ -7,7 +7,7 @@ module.exports = (sequelize, dataTypes) => {
             allowNull: false,
             autoIncrement: true
         },
-        businessFK: {
+        businessfk : {
             type: dataTypes.INTEGER,
             allowNull: false
         },
@@ -41,12 +41,12 @@ module.exports = (sequelize, dataTypes) => {
     Benefit.associate = function (models) {
         Benefit.belongsTo(models.Business, {
             as: "business",
-            foreignKey: "businessFK"
+            foreignKey: "businessfk"
         });
     
         Benefit.hasMany(models.Transaction_type, {
             as: "transaction_types",
-            foreignKey: "benefitFK"
+            foreignKey: "benefitfk"
         });
     };    
 
