@@ -1,5 +1,7 @@
 const db = require('../database/models');
 const bcrypt = require('bcrypt');
+const path = require("path");
+const fs = require('fs').promises;
 
 module.exports = {
     list: async (req, res) => {
@@ -98,7 +100,7 @@ module.exports = {
                     email: email,
                     password: hashedPassword,
                     rolFK: 2,
-                    menu: menu,
+                    menu: req.file?.filename,
                 }
             )
 
@@ -127,17 +129,29 @@ module.exports = {
         const { username, email, password, menu } = req.body;
 
         // Se genera el hash para el password
-        const hashedPassword = await bcrypt.hash(password, 10);
+        if (password) {
+            var hashedPassword = await bcrypt.hash(password, 10);
+        }
 
         try {
             let updateBusiness = await db.Business.findByPk(req.params.id);
 
+            // Almacena la ruta del archivo anterior antes de la actualización
+            const previousMenuPath = updateBusiness.menu;
+
             updateBusiness.username = username?.trim();
             updateBusiness.email = email?.trim();
-            updateBusiness.password = hashedPassword;
-            updateBenefit.menu = req.file?.menu || updateBenefit.menu;
+            updateBusiness.password = hashedPassword || updateBusiness.password;
+            updateBusiness.menu = req.file?.filename || updateBusiness.menu;
 
             await updateBusiness.save();
+
+            // Elimina el archivo anterior solo si el campo 'menu' se actualiza
+            if (req.file && previousMenuPath) {
+                await fs.unlink(
+                    path.join(__dirname, `../../public/pdfs/BusinessesPdf/${previousMenuPath}`)
+                );
+            }
 
             if (updateBusiness) {
                 return res.status(200).json({
@@ -182,5 +196,10 @@ module.exports = {
                 msg: error.message ? error.message : "Contact the site administrator",
             });
         }
+    },
+    menu: (req, res) => {
+        res.sendFile(
+            path.join(__dirname, `../../public/pdfs/BusinessesPdf/${req.params.pdf}.pdf`)
+        )
     }
 }

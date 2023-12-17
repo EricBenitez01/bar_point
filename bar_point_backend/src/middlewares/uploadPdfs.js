@@ -15,7 +15,7 @@ const createStorage = (entityOrFolderName = "BusinessesPdf") => {
             callback(null, `./public/pdfs/${entityOrFolderName}`);
         },
         filename: (req, file, callback) => {
-            callback(null, `${entityOrFolderName}-${Date.now()}-${file.originalname}`);
+            callback(null, `${entityOrFolderName}-${Date.now()}-${file.originalname.replace(/ /g, "")}`);
         },
     });
 
