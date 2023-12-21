@@ -21,11 +21,11 @@ module.exports = {
   },
 
   create: async (req, res) => {
-    const { businessfk , purchase_value, points, ticket_number } = req.body;
+    const { businessfk, purchase_value, points, ticket_number } = req.body;
 
     try {
       const newPurchase = await db.Purchase.create({
-        businessfk ,
+        businessfk,
         purchase_value,
         points,
         ticket_number
@@ -75,7 +75,7 @@ module.exports = {
   },
 
   update: async (req, res) => {
-    const { businessfk , purchase_value, points, ticket_number } = req.body;
+    const { businessfk, purchase_value, points, ticket_number } = req.body;
     const purchaseId = req.params.id;
 
     try {
@@ -85,7 +85,7 @@ module.exports = {
         return res.status(404).json({ ok: false, msg: 'Purchase not found' });
       }
 
-      purchase.businessfk  = businessfk ;
+      purchase.businessfk = businessfk;
       purchase.purchase_value = purchase_value;
       purchase.points = points;
       purchase.ticket_number = ticket_number;

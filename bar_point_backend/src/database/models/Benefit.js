@@ -7,7 +7,7 @@ module.exports = (sequelize, dataTypes) => {
             allowNull: false,
             autoIncrement: true
         },
-        businessfk : {
+        businessfk: {
             type: dataTypes.INTEGER,
             allowNull: false
         },

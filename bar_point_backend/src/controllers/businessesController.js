@@ -8,15 +8,15 @@ module.exports = {
 
         try {
             let { order = "id" } = req.query;
-            let orders = ["id", "username", "email"];
+            let orders = ["id", "name", "email"];
 
             if (!orders.includes(order)) {
-                throw new Error(`The ${order} field does not exist. Allowed fields : [username, email]`);
+                throw new Error(`The ${order} field does not exist. Allowed fields : [name, email]`);
             }
             let businesses = await db.Business.findAll({
                 order: [order],
                 attributes: {
-                    exclude: ['password', 'create_time', 'rolFK']
+                    exclude: ['password', 'create_time', 'rolfk']
                 }
             })
             if (businesses.length) {
@@ -49,7 +49,7 @@ module.exports = {
 
             let business = await db.Business.findByPk(id, {
                 attributes: {
-                    exclude: ['password', 'create_time', 'rolFK'],
+                    exclude: ['password', 'create_time', 'rolfk'],
                 }
             });
 
@@ -72,7 +72,7 @@ module.exports = {
     },
     create: async (req, res) => {
 
-        const { name, email, password, lastname, cuit, adress, phone, businessName, rolFK, menu } = req.body
+        const { name, email, password, lastname, cuit, adress, phone, businessName, rolfk, menu } = req.body
 
         try {
 
@@ -96,10 +96,10 @@ module.exports = {
                     cuit: cuit,
                     adress: adress,
                     phone: phone,
-                    businessName: businessName,
+                    businessname: businessName,
                     email: email,
                     password: hashedPassword,
-                    rolFK: 2,
+                    rolfk: 2,
                     menu: req.file?.filename,
                 }
             )
@@ -139,7 +139,7 @@ module.exports = {
             // Almacena la ruta del archivo anterior antes de la actualización
             const previousMenuPath = updateBusiness.menu;
 
-            updateBusiness.username = username?.trim();
+            updateBusiness.name = username?.trim();
             updateBusiness.email = email?.trim();
             updateBusiness.password = hashedPassword || updateBusiness.password;
             updateBusiness.menu = req.file?.filename || updateBusiness.menu;

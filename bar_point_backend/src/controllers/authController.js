@@ -3,11 +3,9 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 module.exports = {
-    userLogin: async (req, res) => { debugger;
-        const { email, password } = req.body;
-        debugger;
+    userLogin: async (req, res) => {
+        const { email, password, businessId } = req.body;
         try {
-            debugger;
             // Se verifica si el user existe en la bd
             const user = await db.User.findOne({ where: { email: email } });
 
@@ -27,9 +25,24 @@ module.exports = {
                     msg: 'Invalid credentials, wrong password' 
                 });
             }
+            
+            //si una relacion entre un negocio no existe, la crea, sino, no hace nada
+            let userPointsExist = db.User_points.findAll({
+                where: {
+                    userfk: user.id,
+                    businessfk: businessId
+                }
+            });            
 
+            if(!userPointsExist) {
+                await db.User_points.create({
+                    userfk: newUser.id,
+                    businessfk: businessId,
+                    quantity: 0,
+                });
+            }
             // Se genera un token para el user
-            const token = jwt.sign({ userId: user.id, rol: user.rolFK }, process.env.SECRET_TOKEN);
+            const token = jwt.sign({ userId: user.id, rol: user.rolfk }, process.env.SECRET_TOKEN);
 
             return res.status(200).json({
                 ok: true,

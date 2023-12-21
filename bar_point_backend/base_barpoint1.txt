@@ -43,11 +43,11 @@ CREATE TABLE IF NOT EXISTS `barpoint`.`business` (
   `email` VARCHAR(500) NULL DEFAULT NULL,
   `password` VARCHAR(500) NOT NULL,
   `create_time` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP(),
-  `rolFK` INT NOT NULL,
+  `rolfk` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `rolFK_idx` (`rolFK` ASC),
-  CONSTRAINT `business_rolFK`
-    FOREIGN KEY (`rolFK`) -- Cambia `business_rolFK` a `rolFK` aquí
+  INDEX `rolfk_idx` (`rolfk` ASC),
+  CONSTRAINT `business_rolfk`
+    FOREIGN KEY (`rolfk`) -- Cambia `business_rolfk` a `rolfk` aquí
     REFERENCES `barpoint`.`rol` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -55,7 +55,7 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
 -- Insertar dos negocios mockeados en la tabla business
-INSERT INTO `barpoint`.`business` (`username`, `email`, `password`, `rolFK`)
+INSERT INTO `barpoint`.`business` (`username`, `email`, `password`, `rolfk`)
 VALUES
 ('Negocio1', 'negocio1@example.com', 'contraseña1', 3), -- ID 3 corresponde al rol 'business'
 ('Negocio2', 'negocio2@example.com', 'contraseña2', 3); -- ID 3 corresponde al rol 'business'
@@ -67,15 +67,15 @@ VALUES
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `barpoint`.`benefit` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `businessfk ` INT NOT NULL,
+  `businessfk` INT NOT NULL,
   `benefitname` VARCHAR(500) NULL DEFAULT NULL,
   `img` VARCHAR(500) NULL DEFAULT NULL,
   `discount` INT NOT NULL,
   `points_req` VARCHAR(500) NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `businessfk _idx` (`businessfk ` ASC),
-  CONSTRAINT `businessfk _benefit`
-    FOREIGN KEY (`businessfk `)
+  INDEX `businessfk_idx` (`businessfk` ASC),
+  CONSTRAINT `businessfk_benefit`
+    FOREIGN KEY (`businessfk`)
     REFERENCES `barpoint`.`business` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -88,22 +88,22 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `barpoint`.`purchase` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `businessfk ` INT NOT NULL,
+  `businessfk` INT NOT NULL,
   `purchase_value` INT NOT NULL,
   `points` INT NOT NULL,
   `ticket_number` DOUBLE NULL,
   PRIMARY KEY (`id`),
-  INDEX `businessfk _idx` (`businessfk ` ASC),
-  CONSTRAINT `businessfk `
-    FOREIGN KEY (`businessfk `)
+  INDEX `businessfk_idx` (`businessfk` ASC),
+  CONSTRAINT `businessfk`
+    FOREIGN KEY (`businessfk`)
     REFERENCES `barpoint`.`business` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
-INSERT INTO `barpoint`.`benefit` (`id`, `businessfk `, `benefitname`, `discount`, `points_req`) VALUES ('1', '1', 'promo', '1', '1000');
-INSERT INTO `barpoint`.`benefit` (`id`, `businessfk `, `benefitname`, `discount`, `points_req`) VALUES ('2', '1', 'promo1', '1', '50');
+INSERT INTO `barpoint`.`benefit` (`id`, `businessfk`, `benefitname`, `discount`, `points_req`) VALUES ('1', '1', 'promo', '1', '1000');
+INSERT INTO `barpoint`.`benefit` (`id`, `businessfk`, `benefitname`, `discount`, `points_req`) VALUES ('2', '1', 'promo1', '1', '50');
 
 -- -----------------------------------------------------
 -- Table `barpoint`.`transaction_type`
@@ -132,11 +132,11 @@ CREATE TABLE IF NOT EXISTS `barpoint`.`user` (
   `address` VARCHAR(255) NOT NULL,
   `gender` VARCHAR(16) NOT NULL,
   `create_time` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP(),
-  `rolFK` INT NOT NULL,
+  `rolfk` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `rolFK_idx` (`rolFK` ASC),
-  CONSTRAINT `rolFK`
-    FOREIGN KEY (`rolFK`)
+  INDEX `rolfk_idx` (`rolfk` ASC),
+  CONSTRAINT `rolfk`
+    FOREIGN KEY (`rolfk`)
     REFERENCES `barpoint`.`rol` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -149,15 +149,15 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `barpoint`.`transaction` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `userFK` INT NOT NULL,
-  `businessfk ` INT NOT NULL,
+  `userfk` INT NOT NULL,
+  `businessfk` INT NOT NULL,
   `transaction_typeFK` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `userFK_idx` (`userFK` ASC),
-  INDEX `businessfk _idx` (`businessfk ` ASC),
+  INDEX `userfk_idx` (`userfk` ASC),
+  INDEX `businessfk_idx` (`businessfk` ASC),
   INDEX `transaction_typeFK_idx` (`transaction_typeFK` ASC),
-  CONSTRAINT `businessfk _transaction`
-    FOREIGN KEY (`businessfk `)
+  CONSTRAINT `businessfk_transaction`
+    FOREIGN KEY (`businessfk`)
     REFERENCES `barpoint`.`business` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
@@ -166,8 +166,8 @@ CREATE TABLE IF NOT EXISTS `barpoint`.`transaction` (
     REFERENCES `barpoint`.`transaction_type` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `userFK_transaction`
-    FOREIGN KEY (`userFK`)
+  CONSTRAINT `userfk_transaction`
+    FOREIGN KEY (`userfk`)
     REFERENCES `barpoint`.`user` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -181,18 +181,18 @@ DEFAULT CHARACTER SET = utf8;
 CREATE TABLE IF NOT EXISTS `barpoint`.`user_points` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `quantity` INT NOT NULL,
-  `userFK` INT NOT NULL,
-  `businessfk ` INT NOT NULL,
+  `userfk` INT NOT NULL,
+  `businessfk` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `userFK_idx` (`userFK` ASC),
-  INDEX `businessfk _idx` (`businessfk ` ASC),
-  CONSTRAINT `businessfk _user_points`
-    FOREIGN KEY (`businessfk `)
+  INDEX `userfk_idx` (`userfk` ASC),
+  INDEX `businessfk_idx` (`businessfk` ASC),
+  CONSTRAINT `businessfk_user_points`
+    FOREIGN KEY (`businessfk`)
     REFERENCES `barpoint`.`business` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `userFK_user_points`
-    FOREIGN KEY (`userFK`)
+  CONSTRAINT `userfk_user_points`
+    FOREIGN KEY (`userfk`)
     REFERENCES `barpoint`.`user` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)

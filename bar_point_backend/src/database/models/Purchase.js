@@ -7,7 +7,7 @@ module.exports = (sequelize, dataTypes) => {
             allowNull: false,
             autoIncrement: true
         },
-        businessfk : {
+        businessfk: {
             type: dataTypes.INTEGER,
             allowNull: false
         },
@@ -33,7 +33,7 @@ module.exports = (sequelize, dataTypes) => {
     Purchase.associate = function (models) {
         Purchase.belongsTo(models.Business, {
             as: "business",
-            foreignKey: "businessfk "
+            foreignKey: "businessfk"
         })
     };
 

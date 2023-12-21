@@ -24,14 +24,14 @@ module.exports = (sequelize, dataTypes) => {
     Rol.associate = function (models) {
         Rol.hasMany(models.User, {
             as: "users",
-            foreignKey: "rolFK"
+            foreignKey: "rolfk"
         })
     };
 
     Rol.associate = function (models) {
         Rol.hasMany(models.Business, {
             as: "businesses",
-            foreignKey: "rolFK"
+            foreignKey: "rolfk"
         })
     };
 

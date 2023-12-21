@@ -17,7 +17,7 @@ module.exports = {
             
             const businessUsers = await db.User_points.findAll({
                 where: {
-                    businessfk : businessId,
+                    businessfk: businessId,
                 },
                 order: [order],
                 attributes: {
@@ -25,7 +25,7 @@ module.exports = {
                 }
             });
 
-            const userIds = businessUsers.map(user => user.userFK);
+            const userIds = businessUsers.map(user => user.userfk);
             
             const users = await db.User.findAll({
                 where: {
@@ -33,7 +33,7 @@ module.exports = {
                 },
                 include: [{
                     model: db.User_points,
-                    as: 'user_points', // Alias de la asociación
+                    as: 'user_points',
                     attributes: ['quantity']
                 }],
                 order: [order],
@@ -97,7 +97,7 @@ module.exports = {
     },
     create: async (req, res) => {
 
-        const { username, email, address, gender, birthday, password, rolFK } = req.body;
+        const { username, email, address, gender, birthday, password, rolFK, businessId } = req.body;
 
         try {
 
@@ -127,7 +127,13 @@ module.exports = {
             )
 
             if (newUser) {
-
+                //si hay un nuevo usuario, se debe crear un registro relacionandolo con el negocio
+                await db.User_points.create({
+                    userfk: newUser.id,
+                    businessfk: businessId,
+                    quantity: 0,
+                });
+                
                 return res.status(200).json({
                     ok: true,
                     meta: {

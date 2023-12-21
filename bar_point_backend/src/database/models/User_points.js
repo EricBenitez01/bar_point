@@ -12,11 +12,11 @@ module.exports = (sequelize, dataTypes) => {
             type: dataTypes.INTEGER,
             allowNull: false
         },
-        userFK: {
+        userfk: {
             type: dataTypes.INTEGER,
             allowNull: false
         },
-        businessfk : {
+        businessfk: {
             type: dataTypes.INTEGER,
             allowNull: false
         }
@@ -25,7 +25,10 @@ module.exports = (sequelize, dataTypes) => {
 
     const config = {
         tableName: "user_points",
-        timestamps: false
+        timestamps: true,
+        createdAt: 'create_time',
+        updatedAt: false,
+        deletedAt: false
     }
 
     const User_points = sequelize.define(alias, cols, config);
@@ -33,14 +36,14 @@ module.exports = (sequelize, dataTypes) => {
     User_points.associate = function (models) {
         User_points.belongsTo(models.User, {
             as: "user",
-            foreignKey: "userFK"
+            foreignKey: "userfk"
         })
     };
 
     User_points.associate = function (models) {
         User_points.belongsTo(models.Business, {
             as: "business",
-            foreignKey: "businessfk "
+            foreignKey: "businessfk"
         })
     };
 

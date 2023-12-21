@@ -56,12 +56,12 @@ module.exports = (sequelize, dataTypes) => {
     
         User.hasMany(models.User_points, {
             as: "user_points",
-            foreignKey: "userFK"
+            foreignKey: "userfk"
         });
     
         User.hasMany(models.Transaction, {
             as: "transactions",
-            foreignKey: "userFK"
+            foreignKey: "userfk"
         });
     };
 

@@ -27,7 +27,7 @@ module.exports = (sequelize, dataTypes) => {
             type: dataTypes.STRING(500),
             allowNull: false
         },
-        businessName: {
+        businessname: {
             type: dataTypes.STRING(500),
             allowNull: false
         },
@@ -39,7 +39,7 @@ module.exports = (sequelize, dataTypes) => {
             type: dataTypes.STRING(500),
             allowNull: false
         },
-        rolFK: {
+        rolfk: {
             type: dataTypes.INTEGER,
             allowNull: false
         },
@@ -60,35 +60,35 @@ module.exports = (sequelize, dataTypes) => {
     Business.associate = function (models) {
         Business.hasMany(models.Benefit, {
             as: "benefits",
-            foreignKey: "businessfk "
+            foreignKey: "businessfk"
         })
     };
 
     Business.associate = function (models) {
         Business.hasMany(models.Purchase, {
             as: "purchases",
-            foreignKey: "businessfk "
+            foreignKey: "businessfk"
         })
     };
 
     Business.associate = function (models) {
         Business.hasMany(models.User_points, {
             as: "user_points",
-            foreignKey: "businessfk "
+            foreignKey: "businessfk"
         })
     };
 
     Business.associate = function (models) {
         Business.hasMany(models.Transaction, {
             as: "transactions",
-            foreignKey: "businessfk "
+            foreignKey: "businessfk"
         })
     };
 
     Business.associate = function (models) {
         Business.belongsTo(models.Rol, {
             as: "rol",
-            foreignKey: "rolFK"
+            foreignKey: "rolfk"
         })
     };
 
