@@ -88,6 +88,7 @@ module.exports = {
     },
     create: async (req, res) => {
 
+<<<<<<< HEAD
         const { businessfk, benefitName, img, discount, points_req, description } = req.body;
 
         try {
@@ -97,6 +98,17 @@ module.exports = {
                     benefitname: benefitName?.trim(),
                     discount: +discount,
                     points_req: +points_req,
+=======
+        const { businessFK, benefitname, img, discount, points_req, description } = req.body;
+        console.log(req.file);
+        try {
+            let newBenefit = await db.Benefit.create(
+                {
+                    businessFK: businessFK,
+                    benefitname: benefitname?.trim(),
+                    discount: discount,
+                    points_req: points_req,
+>>>>>>> atoledo
                     img: req.file?.filename,
                     description: description,
                 }
