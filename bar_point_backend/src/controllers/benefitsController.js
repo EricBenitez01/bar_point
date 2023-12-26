@@ -128,10 +128,10 @@ module.exports = {
             let updateBenefit = await db.Benefit.findByPk(req.params.id);
 
             updateBenefit.benefitname = benefitname?.trim();
-            updateBenefit.discount = +discount;
-            updateBenefit.points_req = +points_req;
-            updateBenefit.img = req.file?.filename || updateBenefit.img;
-            updateBenefit.description = +description;
+            updateBenefit.discount = discount;
+            updateBenefit.points_req = points_req;
+            updateBenefit.img = req.file?.filename;
+            updateBenefit.description = description;
 
             await updateBenefit.save();
 
