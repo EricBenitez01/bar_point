@@ -17,6 +17,7 @@ const benefitsRoutes = require('./routes/benefitsRoutes');
 const purchaseRoutes = require('./routes/purchaseRoutes');
 const transaction = require('./routes/transactionRoute');
 const businessesRoutes = require('./routes/businessesRoutes');
+const imagesRoutes = require('./routes/imagesRoutes');
 const cors = require('cors');
 
 app.use(express.urlencoded({ extended: false }));
@@ -28,7 +29,6 @@ app.use(benefitsRoutes, cors(corsOptions));
 app.use(purchaseRoutes, cors(corsOptions));
 app.use(transaction, cors(corsOptions));
 app.use(businessesRoutes, cors(corsOptions));
-
-
+app.use(imagesRoutes)
 
 app.listen('3001', () => console.log('Server running in port 3001'));

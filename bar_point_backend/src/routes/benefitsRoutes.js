@@ -11,5 +11,4 @@ router
     .put('/benefits/:id', uploadImageBenefit.single('img'), update)
     .delete('/benefits/:id', destroy)
 
-
 module.exports = router;

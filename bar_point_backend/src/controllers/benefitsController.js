@@ -89,14 +89,14 @@ module.exports = {
     create: async (req, res) => {
 
         const { businessFK, benefitname, img, discount, points_req, description } = req.body;
-
+        console.log(req.file);
         try {
             let newBenefit = await db.Benefit.create(
                 {
-                    businessFK: +businessFK,
+                    businessFK: businessFK,
                     benefitname: benefitname?.trim(),
-                    discount: +discount,
-                    points_req: +points_req,
+                    discount: discount,
+                    points_req: points_req,
                     img: req.file?.filename,
                     description: description,
                 }
@@ -128,10 +128,10 @@ module.exports = {
             let updateBenefit = await db.Benefit.findByPk(req.params.id);
 
             updateBenefit.benefitname = benefitname?.trim();
-            updateBenefit.discount = +discount;
-            updateBenefit.points_req = +points_req;
-            updateBenefit.img = req.file?.filename || updateBenefit.img;
-            updateBenefit.description = +description;
+            updateBenefit.discount = discount;
+            updateBenefit.points_req = points_req;
+            updateBenefit.img = req.file?.filename;
+            updateBenefit.description = description;
 
             await updateBenefit.save();
 
