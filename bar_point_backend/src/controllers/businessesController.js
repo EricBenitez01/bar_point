@@ -97,7 +97,7 @@ module.exports = {
                     businessName: businessName,
                     email: email,
                     password: hashedPassword,
-                    rolFK: 2,
+                    rolFK: rolFK,
                     menu: menu,
                 }
             )
