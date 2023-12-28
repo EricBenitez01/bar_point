@@ -199,7 +199,7 @@ module.exports = {
     },
     menu: (req, res) => {
         res.sendFile(
-            path.join(__dirname, `../../public/pdfs/BusinessesPdf/${req.params.pdf}.pdf`)
+            path.join(__dirname, `../../public/pdfs/BusinessesPdf/${req.params.pdf}`)
         )
     }
 }
